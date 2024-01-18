@@ -1,42 +1,187 @@
-// Workout types
-const WARMUP = 'WARMUP';
-const MAIN_WORKOUT = 'MAIN_WORKOUT';
-const STRETCHING = 'STRETCHING';
-const RELAX = 'RELAX';
-
-// Delays in milliseconds
-const DELAY_BETWEEN_EXERCISES = 10 * 1000;
-const DELAY_BETWEEN_WORKOUT_TYPES = 30 * 1000;
-const WARNING_TIME = 15;
-
-function requestWakeLock() {
-  if ('wakeLock' in navigator) {
-    navigator.wakeLock.request('screen').then((lock) => {
-      wakeLock = lock;
-      console.log('Wake lock activated.');
-    }).catch((error) => {
-      console.error('Wake lock request failed:', error);
-    });
-  }
-}
-
 document.addEventListener('DOMContentLoaded', function () {
   const workoutList = [
-    { type: WARMUP, message: 'Jumping Jacks', time: 30 },
-    { type: RELAX, message: 'Relax 10 seconds', time: 10 },
-    { type: WARMUP, message: 'Arm Circles', time: 30 },
+    { message: 'Good luck!', time: 5 },
 
-    { type: RELAX, message: 'Relax 30 seconds', time: 30 },
+    { message: 'Next exercise is Jumping Jacks in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
 
-    { type: MAIN_WORKOUT, message: 'Bodyweight Squats', time: 30 },
-    { type: RELAX, message: 'Relax 10 seconds', time: 10 },
-    { type: MAIN_WORKOUT, message: 'Lunges', time: 30 },
+    { message: 'Next exercise is Leg Swings in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
 
-    { type: RELAX, message: 'Relax', time: 30 },
+    { message: 'Next exercise is Hip Circles in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
 
-    { type: STRETCHING, message: 'Neck Stretch', time: 30 },
-    { type: RELAX, message: 'Relax 10 seconds', time: 10 },
-    { type: STRETCHING, message: 'Shoulder Stretch', time: 30 }
+    { message: 'Next exercise is High Knees in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Butt Kicks in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Jump Rope in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Torso Twists in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Ankle Rolls in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Dynamic Lunges in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+
+    { message: 'Next exercise is Wrist Circles in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Neck Tilts and Rolls in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Side Bends in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+
+    { message: 'Relax 30 seconds before main workout', time: 30, shouldNotifyHalfTime: true },
+
+    { message: 'Next exercise is Bodyweight Squats in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Lunges in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Push-ups in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Tricep Dips in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Bodyweight Rows in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Mountain Climbers in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Burpees in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Bicycle crunch in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Calf Raises in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Plank in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+
+    { message: 'Relax', time: 30 },
+
+    { message: 'Next exercise is Neck Stretch in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Shoulder Stretch in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Triceps Stretch in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Chest Opener in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Wrist Stretch in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Cat-Cow Stretch in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Child Pose in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Seated Forward Bend in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Butterfly Stretch in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Quadriceps Stretch in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Hamstring Stretch in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Inner Thigh Stretch in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Calf Stretch in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+    { message: 'Relax 10 seconds', time: 10 },
+
+    { message: 'Next exercise is Spinal twist in 5 seconds', time: 10 },
+    { message: 'Start', time: 30, shouldNotifyHalfTime: true, shouldPlaySound: true },
+    { message: 'End', time: 5 },
+
+    { message: 'Good job!', time: 5 },
   ];
 
   let currentIndex = 0;
@@ -46,11 +191,11 @@ document.addEventListener('DOMContentLoaded', function () {
   let voice;
 
   function updateCountdown(seconds) {
-    document.getElementById('countdown').innerText = `Next: ${seconds}s`;
+    document.getElementById('countdown').innerText = `${seconds}s`;
   }
 
   function updateCurrentExercise(message) {
-    document.getElementById('currentExercise').innerText = `Current Exercise: ${message}`;
+    document.getElementById('currentExercise').innerText = `${message}`;
   }
 
   const voiceSelect = document.getElementById('voiceSelect');
@@ -66,6 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
       voiceSelect.appendChild(option);
     });
   }
+
   function saveSelectedVoice() {
     const selectedVoice = voiceSelect.value;
     localStorage.setItem('selectedVoice', selectedVoice);
@@ -90,22 +236,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectedVoice = voiceSelect.value;
     voice = window.speechSynthesis.getVoices().find((v) => v.name === selectedVoice);
     if (voice) {
-      speakExercise('Testing voice selection.', voice);
+      speakMessage('Testing voice selection.', voice);
       saveSelectedVoice();
     }
   });
 
-  function speakExercise(message) {
-    const exerciseUtterance = new SpeechSynthesisUtterance(message);
-    exerciseUtterance.voice = voice;
-    window.speechSynthesis.speak(exerciseUtterance);
-    updateCurrentExercise(message);
-  }
-
-  function speakWarning() {
-    const warningUtterance = new SpeechSynthesisUtterance('Warning: 15 seconds remaining');
-    warningUtterance.voice = voice;
-    window.speechSynthesis.speak(warningUtterance);
+  function speakMessage(message) {
+    const messageUtterance = new SpeechSynthesisUtterance(message);
+    messageUtterance.voice = voice;
+    window.speechSynthesis.speak(messageUtterance);
   }
 
   function toggleState() {
@@ -136,21 +275,51 @@ document.addEventListener('DOMContentLoaded', function () {
     speakNextWithDelay();
   }
 
+  function playBeat() {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Create an oscillator
+    const oscillator = audioContext.createOscillator();
+
+    // Set the oscillator type (e.g., 'sine', 'square', 'sawtooth', 'triangle')
+    oscillator.type = 'sine';
+
+    // Set the frequency in hertz
+    oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // 440 Hz is the default for the A4 note
+
+    // Connect the oscillator to the audio context's destination (speakers)
+    oscillator.connect(audioContext.destination);
+
+    // Start the oscillator
+    oscillator.start();
+
+    // Stop the oscillator after 2 seconds (you can adjust the time as needed)
+    oscillator.stop(audioContext.currentTime + 0.1);
+  }
+
   function speakNextWithDelay() {
     if (currentIndex < workoutList.length) {
-      const currentExercise = workoutList[currentIndex];
-      speakExercise(currentExercise.message);
+      const {message, time, shouldNotifyHalfTime, shouldPlaySound} = workoutList[currentIndex];
+      const halfTime = Math.abs(time/2);
 
-      const delay = timeLeft > 0 ? timeLeft * 1000 :
-        currentExercise.type === RELAX ? DELAY_BETWEEN_EXERCISES : DELAY_BETWEEN_WORKOUT_TYPES;
-      timeLeft = Math.floor(delay / 1000);
+      if(timeLeft === 0){
+        speakMessage(message);
+      }
+
+      timeLeft =  timeLeft > 0 ? timeLeft : time;
+
+      updateCurrentExercise(message);
 
       countdownInterval = setInterval(() => {
         saveAppState();
         updateCountdown(timeLeft);
 
-        if (timeLeft === WARNING_TIME) {
-          speakWarning();
+        if(shouldPlaySound){
+          playBeat();
+        }
+
+        if (timeLeft === halfTime && shouldNotifyHalfTime) {
+          speakMessage(`${halfTime} seconds`);
         }
 
         if (timeLeft === 0) {
@@ -202,7 +371,4 @@ document.addEventListener('DOMContentLoaded', function () {
   if (timeLeft > 0 && state === 'Pause') {
     speakNextWithDelay();
   }
-
-  // Request wake lock
-  requestWakeLock();
 });
