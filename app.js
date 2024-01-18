@@ -279,6 +279,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Create an audio context
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
+    audioContext.resume();
+
     // Create an oscillator
     const oscillator = audioContext.createOscillator();
 
@@ -306,14 +308,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Stop the oscillator after 1 second (adjust the time as needed)
     oscillator.stop(audioContext.currentTime + 1);
-
-    // For Safari compatibility, we need to handle the promise returned by the start method
-    // and resume the audio context upon user interaction
-    document.addEventListener('click', () => {
-      if (audioContext.state === 'suspended') {
-        audioContext.resume();
-      }
-    });
   }
 
   function speakNextWithDelay() {
