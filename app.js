@@ -276,10 +276,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function playBeat() {
-    // Create an audio context
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-    audioContext.resume();
 
     // Create an oscillator
     const oscillator = audioContext.createOscillator();
