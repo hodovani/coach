@@ -9,6 +9,17 @@ const DELAY_BETWEEN_EXERCISES = 10 * 1000;
 const DELAY_BETWEEN_WORKOUT_TYPES = 30 * 1000;
 const WARNING_TIME = 15;
 
+function requestWakeLock() {
+  if ('wakeLock' in navigator) {
+    navigator.wakeLock.request('screen').then((lock) => {
+      wakeLock = lock;
+      console.log('Wake lock activated.');
+    }).catch((error) => {
+      console.error('Wake lock request failed:', error);
+    });
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   const workoutList = [
     { type: WARMUP, message: 'Jumping Jacks', time: 30 },
@@ -191,4 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (timeLeft > 0 && state === 'Pause') {
     speakNextWithDelay();
   }
+
+  // Request wake lock
+  requestWakeLock();
 });
