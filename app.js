@@ -276,25 +276,44 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function playBeat() {
+    // Create an audio context
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
     // Create an oscillator
     const oscillator = audioContext.createOscillator();
 
-    // Set the oscillator type (e.g., 'sine', 'square', 'sawtooth', 'triangle')
+    // Create a gain node for volume control
+    const gainNode = audioContext.createGain();
+
+    // Set the oscillator type to 'sine' for a smooth sound
     oscillator.type = 'sine';
 
-    // Set the frequency in hertz
-    oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // 440 Hz is the default for the A4 note
+    // Set the frequency to a comfortable pitch (e.g., 800 Hz)
+    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
 
-    // Connect the oscillator to the audio context's destination (speakers)
-    oscillator.connect(audioContext.destination);
+    // Set the gain (volume) to a reasonable level
+    gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+
+    // Connect the oscillator to the gain node and the gain node to the audio context's destination
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
 
     // Start the oscillator
     oscillator.start();
 
-    // Stop the oscillator after 2 seconds (you can adjust the time as needed)
-    oscillator.stop(audioContext.currentTime + 0.1);
+    // Gradually decrease the volume to make it fade out smoothly
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+
+    // Stop the oscillator after 1 second (adjust the time as needed)
+    oscillator.stop(audioContext.currentTime + 1);
+
+    // For Safari compatibility, we need to handle the promise returned by the start method
+    // and resume the audio context upon user interaction
+    document.addEventListener('click', () => {
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+    });
   }
 
   function speakNextWithDelay() {
