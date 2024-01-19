@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+window.addEventListener('load', function () {
   const workoutList = [
     { message: 'Good luck!', time: 5 },
 
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let timeLeft = 0;
   let voice;
 
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  let audioContext;
 
   function updateCountdown(seconds) {
     document.getElementById('countdown').innerText = `${seconds}s`;
@@ -227,11 +227,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const savedVoice = getSavedVoice();
     if (savedVoice) {
       voiceSelect.value = savedVoice;
-      voice = window.speechSynthesis.getVoices().find((v) => v.name === savedVoice);;
+      voice = window.speechSynthesis.getVoices().find((v) => v.name === savedVoice);
     }
   }
 
   populateVoiceList();
+  if (
+    typeof speechSynthesis !== "undefined" &&
+    speechSynthesis.onvoiceschanged !== undefined
+  ) {
+    speechSynthesis.onvoiceschanged = populateVoiceList;
+  }
+
   applySavedVoice();
 
   voiceSelect.addEventListener('change', function () {
@@ -260,6 +267,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function startWorkout() {
+    if(!audioContext){
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
     state = 'Pause';
     document.getElementById('playPauseButton').innerText = 'Pause';
     speakNextWithDelay();
