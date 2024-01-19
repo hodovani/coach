@@ -190,6 +190,10 @@ document.addEventListener('DOMContentLoaded', function () {
   let timeLeft = 0;
   let voice;
 
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+
   function updateCountdown(seconds) {
     document.getElementById('countdown').innerText = `${seconds}s`;
   }
@@ -276,14 +280,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function playBeat() {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-    // Create an oscillator
-    const oscillator = audioContext.createOscillator();
-
-    // Create a gain node for volume control
-    const gainNode = audioContext.createGain();
-
     // Set the oscillator type to 'sine' for a smooth sound
     oscillator.type = 'sine';
 
