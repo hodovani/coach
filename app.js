@@ -1,6 +1,6 @@
 import workoutList from './workoutList.js';
-
-window.addEventListener('load', function () {
+alert(new Date());
+window.addEventListener('load', async function () {
   let currentIndex = 0;
   let state = 'Play'; // Initial state
   let countdownInterval;
@@ -8,6 +8,24 @@ window.addEventListener('load', function () {
   let voice;
 
   let audioContext;
+
+  // The wake lock sentinel.
+  let wakeLock = null;
+
+  // Function that attempts to request a screen wake lock.
+  const requestWakeLock = async () => {
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => {
+        console.log('Screen Wake Lock released:', wakeLock.released);
+      });
+      console.log('Screen Wake Lock released:', wakeLock.released);
+    } catch (err) {
+      console.error(`${err.name}, ${err.message}`);
+    }
+  };
+
+  await requestWakeLock();
 
   function updateCountdown(seconds) {
     document.getElementById('countdown').innerText = `${seconds}s`;
@@ -62,7 +80,7 @@ window.addEventListener('load', function () {
     const selectedVoice = voiceSelect.value;
     voice = window.speechSynthesis.getVoices().find((v) => v.name === selectedVoice);
     if (voice) {
-      speakMessage('Testing voice selection.', voice);
+      speakMessage('Тестування голосу.', voice);
       saveSelectedVoice();
     }
   });
