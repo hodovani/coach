@@ -25,8 +25,6 @@ window.addEventListener('load', async function () {
     }
   };
 
-  await requestWakeLock();
-
   function updateCountdown(seconds) {
     document.getElementById('countdown').innerText = `${seconds}s`;
   }
@@ -93,6 +91,7 @@ window.addEventListener('load', async function () {
 
   function toggleState() {
     if (state === 'Play') {
+      requestWakeLock();
       startWorkout();
     } else if (state === 'Pause') {
       pauseWorkout();
