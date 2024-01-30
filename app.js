@@ -1,5 +1,5 @@
 import workoutList from './workoutList.js';
-alert(new Date());
+
 window.addEventListener('load', async function () {
   let currentIndex = 0;
   let state = 'Play'; // Initial state
